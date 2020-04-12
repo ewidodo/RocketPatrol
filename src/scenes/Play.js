@@ -8,6 +8,13 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', "./assets/rocket.png");
         this.load.image('spaceship', "./assets/spaceship.png");
         this.load.image('starfield', "./assets/starfield.png");
+
+        this.load.spritesheet('explosion', './assets/explosion.png', {
+            frameWidth: 64,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 9,
+        });
     }
 
     create() {
@@ -35,18 +42,116 @@ class Play extends Phaser.Scene {
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        //explosion animation config
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion', {
+                start: 0,
+                end: 9,
+                first: 0,
+            }),
+            frameRate: 30,
+        });
+
+        //score configuration
+        this.p1Score = 0;
+        let scoreConfig = {
+            fontFamily : 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100,
+        }
+        this.leftScore = this.add.text(69, 54, this.p1Score, scoreConfig);
+
+        //game over flag
+        this.gameOver = false;
+
+        //timer configuration
+        scoreConfig.fixedWidth = 0;
+        this.timer = this.time.delayedCall(game.settings.gameTimer, () => {
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press [F] to Restart\n[<-] for Menu', scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
+        }, null, this);
     }
 
     update() {
         //scroll starfield
         this.starfield.tilePositionX -= 4;
 
-        //update rocket
-        this.p1Rocket.update();
+        //if game is not over, keep going
+        if (!this.gameOver) {
+            //update rocket
+            this.p1Rocket.update();
 
-        //update spaceships
-        this.ship01.update();
-        this.ship02.update();
-        this.ship03.update();
+            //update spaceships
+            this.ship01.update();
+            this.ship02.update();
+            this.ship03.update();
+        }
+
+        //if game is over, check if restart or return to menu
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
+            this.scene.restart(this.p1Score);
+        }
+
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.scene.start("menuScene");
+        }
+
+        //check if rocket is colliding with spaceships
+        if(this.colliding(this.p1Rocket, this.ship01)) {
+            this.p1Rocket.reset();
+            this.spaceshipKaboom(this.ship01);
+        }
+
+        if(this.colliding(this.p1Rocket, this.ship02)) {
+            this.p1Rocket.reset();
+            this.spaceshipKaboom(this.ship02);
+        }
+
+        if(this.colliding(this.p1Rocket, this.ship03)) {
+            this.p1Rocket.reset();
+            this.spaceshipKaboom(this.ship03);
+        }
+    }
+
+    colliding(rocket, spaceship) {
+        //check if sprites are overlapping
+        if (rocket.x < spaceship.x + spaceship.width &&
+            rocket.x + rocket.width > spaceship.x &&
+            rocket.y < spaceship.y + spaceship.height &&
+            rocket.y + rocket.height > spaceship.y) {
+                return true;
+        } else {
+            return false;
+        }
+    }
+
+    spaceshipKaboom(spaceship) {
+        //temporarily hide the ship
+        spaceship.alpha = 0;
+
+        let kaboom = this.add.sprite(spaceship.x, spaceship.y, 'explosion').setOrigin(0, 0);
+        kaboom.anims.play('explode');
+
+        //once animation completes
+        kaboom.on('animationcomplete', () => {
+            spaceship.reset(); //reset spaceship position
+            spaceship.alpha = 1; //make spaceship visible
+            kaboom.destroy(); //remove explosion sprite
+        });
+
+        //update score
+        this.p1Score += spaceship.points;
+        this.leftScore.text = this.p1Score;
+        this.sound.play('sfx_explosion');
     }
 }
