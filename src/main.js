@@ -8,7 +8,8 @@ let config = {
 let game = new Phaser.Game(config);
 
 game.settings = {
-    spaceshipSpeed: 3,
+    targetSpeed: 3,
+    smallTargetSpeed: 4,
     gameTimer: 60000,
 }
 

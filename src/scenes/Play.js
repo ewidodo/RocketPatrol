@@ -6,7 +6,6 @@ class Play extends Phaser.Scene {
     preload() {
         //load images/tilesprite
         this.load.image('rocket', "./assets/rocket.png");
-        this.load.image('spaceship', "./assets/target_big1.png");
         this.load.image('starfield', "./assets/starfield.png");
 
         this.load.spritesheet('explosion', './assets/explosion.png', {
@@ -14,6 +13,20 @@ class Play extends Phaser.Scene {
             frameHeight: 32,
             startFrame: 0,
             endFrame: 9,
+        });
+
+        this.load.spritesheet('target_big1', './assets/target_big1.png', {
+            frameWidth: 63,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 1,
+        });
+
+        this.load.spritesheet('target_small', './assets/target_small.png', {
+            frameWidth: 41,
+            frameHeight: 22,
+            startFrame: 0,
+            endFrame: 1,
         });
     }
 
@@ -34,9 +47,9 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width/2, 431, 'rocket').setScale(0.5, 0.5).setOrigin(0,0);
 
         //add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width+192, 132, 'spaceship', 0, 30).setOrigin(0,0);
-        this.ship02 = new Spaceship(this, game.config.width+96, 196, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10).setOrigin(0,0);
+        this.ship01 = new Target(this, game.config.width+192, 132, 'target_big1', 0, 30, true).setOrigin(0,0);
+        this.ship02 = new Target(this, game.config.width+96, 196, 'target_small', 0, 20, false).setOrigin(0,0);
+        this.ship03 = new Target(this, game.config.width, 260, 'target_big1', 0, 10, true).setOrigin(0,0);
 
         //define keyboard keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -53,6 +66,34 @@ class Play extends Phaser.Scene {
             }),
             frameRate: 30,
         });
+
+        //targets animation config
+        this.anims.create({
+            key: 'laika',
+            frames: this.anims.generateFrameNumbers('target_big1', {
+                start: 0,
+                end: 1,
+                first: 0,
+            }),
+            frameRate: 4,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'blink',
+            frames: this.anims.generateFrameNumbers('target_small', {
+                start: 0, 
+                end: 1,
+                first: 0,
+            }),
+            frameRate: 4,
+            repeat: -1,
+        })
+
+        //animate targets
+        this.ship01.anims.play('laika');
+        this.ship02.anims.play('blink');
+        this.ship03.anims.play('laika');
 
         //score configuration
         this.p1Score = 0;
