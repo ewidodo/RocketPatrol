@@ -6,7 +6,7 @@ class Play extends Phaser.Scene {
     preload() {
         //load images/tilesprite
         this.load.image('rocket', "./assets/rocket.png");
-        this.load.image('spaceship', "./assets/spaceship.png");
+        this.load.image('spaceship', "./assets/target_big1.png");
         this.load.image('starfield', "./assets/starfield.png");
 
         this.load.spritesheet('explosion', './assets/explosion.png', {
@@ -80,6 +80,11 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press [F] to Restart\n[<-] for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
+
+        //play music
+        this.bgm = game.sound.add('bgm_main');
+        this.bgm.loop = true;
+        this.bgm.play();
     }
 
     update() {
@@ -99,10 +104,12 @@ class Play extends Phaser.Scene {
 
         //if game is over, check if restart or return to menu
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
+            this.bgm.stop();
             this.scene.restart(this.p1Score);
         }
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.bgm.stop();
             this.scene.start("menuScene");
         }
 
