@@ -9,6 +9,7 @@ class Target extends Phaser.GameObjects.Sprite {
         
         this.points = pointValue;
         this.big = isBig;
+        this.isHit = false;
 
         //add more points for small target
         if (!isBig) {

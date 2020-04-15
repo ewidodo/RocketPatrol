@@ -13,5 +13,7 @@ game.settings = {
     gameTimer: 60000,
 }
 
+game.singleplayer = true;
+
 //reserve some keyboard variables
-let keyF, keyLEFT, keyRIGHT;
+let keyA, keyW, keyD, keyY, keyU, keyH, keyJ, keyLEFT, keyUP, keyRIGHT, keySPACE;
