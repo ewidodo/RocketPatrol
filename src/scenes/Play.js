@@ -36,10 +36,10 @@ class Play extends Phaser.Scene {
         }
 
         //add targets (x4)
-        this.ship01 = new Target(this, game.config.width+192, 132, 'target_big1', 0, 30, true).setOrigin(0,0);
-        this.ship02 = new Target(this, game.config.width+400, 181, 'target_small', 0, 35, false).setOrigin(0,0);
-        this.ship03 = new Target(this, game.config.width, 292, 'target_big1', 0, 10, true).setOrigin(0,0);
-        this.ship04 = new Target(this, game.config.width+96, 212, 'target_big1', 0, 20, true).setOrigin(0, 0);
+        this.ship01 = new Target(this, game.config.width, 292, 'target_big1', 0, 10, true).setOrigin(0,0);
+        this.ship02 = new Target(this, game.config.width+96, 212, 'target_big2', 0, 20, true).setOrigin(0, 0);
+        this.ship03 = new Target(this, game.config.width+192, 132, 'target_big3', 0, 30, true).setOrigin(0,0);
+        this.ship04 = new Target(this, game.config.width+400, 181, 'target_small', 0, 35, false).setOrigin(0,0);
 
         //define keyboard keys
         //player1 controls
@@ -70,56 +70,6 @@ class Play extends Phaser.Scene {
             frameRate: 30,
         });
 
-        //------------------------
-        //players animation config
-        this.anims.create({
-            key: 'player1',
-            frames: this.anims.generateFrameNumbers('pod1', {
-                start: 0,
-                end: 1,
-                first: 0,
-            }),
-            frameRate: 8,
-            repeat: -1,
-        });
-
-        if (!game.singleplayer) {
-            this.anims.create({
-                key: 'player2',
-                frames: this.anims.generateFrameNumbers('pod2', {
-                    start: 0,
-                    end: 1,
-                    first: 0,
-                }),
-                frameRate: 8,
-                repeat: -1,
-            });
-        }
-
-        //------------------------
-        //targets animation config
-        this.anims.create({
-            key: 'laika',
-            frames: this.anims.generateFrameNumbers('target_big1', {
-                start: 0,
-                end: 1,
-                first: 0,
-            }),
-            frameRate: 4,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: 'blink',
-            frames: this.anims.generateFrameNumbers('target_small', {
-                start: 0, 
-                end: 1,
-                first: 0,
-            }),
-            frameRate: 4,
-            repeat: -1,
-        })
-
         //-------------------------
         //animate targets & players
         this.p1Rocket.anims.play('player1');
@@ -127,10 +77,10 @@ class Play extends Phaser.Scene {
             this.p2Rocket.anims.play('player2');
         }
 
-        this.ship01.anims.play('laika');
-        this.ship02.anims.play('blink');
-        this.ship03.anims.play('laika');
-        this.ship04.anims.play('laika');
+        this.ship01.anims.play('mason');
+        this.ship02.anims.play('laika');
+        this.ship03.anims.play('hachi');
+        this.ship04.anims.play('blink');
 
         //------------------
         //score configuration

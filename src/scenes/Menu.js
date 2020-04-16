@@ -53,6 +53,20 @@ class Menu extends Phaser.Scene {
             endFrame: 1,
         });
 
+        this.load.spritesheet('target_big2', './assets/target_big2.png', {
+            frameWidth: 63,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 1,
+        });
+
+        this.load.spritesheet('target_big3', './assets/target_big3.png', {
+            frameWidth: 63,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 1,
+        });
+
         this.load.spritesheet('target_small', './assets/target_small.png', {
             frameWidth: 41,
             frameHeight: 22,
@@ -92,8 +106,30 @@ class Menu extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: 'laika',
+            key: 'mason',
             frames: this.anims.generateFrameNumbers('target_big1', {
+                start: 0,
+                end: 1,
+                first: 0,
+            }),
+            frameRate: 4,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'laika',
+            frames: this.anims.generateFrameNumbers('target_big2', {
+                start: 0,
+                end: 1,
+                first: 0,
+            }),
+            frameRate: 4,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'hachi',
+            frames: this.anims.generateFrameNumbers('target_big3', {
                 start: 0,
                 end: 1,
                 first: 0,
@@ -111,10 +147,13 @@ class Menu extends Phaser.Scene {
             }),
             frameRate: 4,
             repeat: -1,
-        })
+        });
 
         //--------------------------
         //start building menu screen
+
+        //divider
+        this.add.rectangle(112, 308, 416, 2, 0xFFFFFF).setOrigin(0, 0);
 
         //instructional images
         this.p1 = this.add.sprite(112, 320, 'pod1').setOrigin(0, 0);
@@ -131,17 +170,21 @@ class Menu extends Phaser.Scene {
         this.tile_u = this.add.image(112, 232, 'u').setOrigin(0, 0);
         this.tile_y_sel = this.add.image(112, 192, 'y_sel').setOrigin(0, 0);
         this.tile_u_sel = this.add.image(112, 232, 'u_sel').setOrigin(0, 0);
-        this.tile_h = this.add.image(339, 192, 'h').setOrigin(0, 0);
-        this.tile_j = this.add.image(339, 232, 'j').setOrigin(0, 0);
+        this.tile_h = this.add.image(308, 192, 'h').setOrigin(0, 0);
+        this.tile_j = this.add.image(308, 232, 'j').setOrigin(0, 0);
 
         //targets list
-        this.laika = this.add.sprite(324, 344, 'target_big1').setOrigin(0, 0);
-        this.blink = this.add.sprite(335, 389, 'target_small').setOrigin(0, 0);
+        this.hachi = this.add.sprite(324, 344, 'target_big3').setOrigin(0, 0);
+        this.laika = this.add.sprite(324, 384, 'target_big2').setOrigin(0, 0);
+        this.mason = this.add.sprite(324, 424, 'target_big1').setOrigin(0, 0);
+        this.blink = this.add.sprite(456, 349, 'target_small').setOrigin(0, 0);
 
         //play animations
         this.p1.anims.play('player1');
         this.p2.anims.play('player2');
+        this.hachi.anims.play('hachi');
         this.laika.anims.play('laika');
+        this.mason.anims.play('mason');
         this.blink.anims.play('blink');
 
         let instructionConfig = {
@@ -157,8 +200,20 @@ class Menu extends Phaser.Scene {
         this.add.text(this.tile_right.x + this.tile_right.width + 12, this.tile_right.y + 8, 'Move right', instructionConfig).setOrigin(0, 0);
         this.add.text(this.tile_up.x + this.tile_up.width + 12, this.tile_up.y + 8, 'Fire pod', instructionConfig).setOrigin(0, 0);
 
+        instructionConfig.fontSize = '14px'
+
+        this.add.text(this.mason.x + this.mason.width + 8, this.mason.y + 8, '+10', instructionConfig).setOrigin(0, 0);
+        this.add.text(this.laika.x + this.laika.width + 8, this.laika.y + 8, '+20', instructionConfig).setOrigin(0, 0);
+        this.add.text(this.hachi.x + this.hachi.width + 8, this.hachi.y + 8, '+30', instructionConfig).setOrigin(0, 0);
+        this.add.text(this.blink.x + this.blink.width + 8, this.blink.y + 5, '+50', instructionConfig).setOrigin(0, 0);
+
+        instructionConfig.color = '#FFFFFF';
+
+        this.add.text(112, 290, 'Guide', instructionConfig).setOrigin (0, 0);
+
         //menu text
         instructionConfig.color = '#53CC32';
+        instructionConfig.fontSize = '18px';
 
         this.add.text(this.tile_y.x + this.tile_y.width + 12, this.tile_y.y + 8, '1 Player', instructionConfig).setOrigin(0, 0);
         this.add.text(this.tile_u.x + this.tile_u.width + 12, this.tile_u.y + 8, '2 Player', instructionConfig).setOrigin(0, 0);
