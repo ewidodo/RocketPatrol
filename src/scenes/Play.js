@@ -4,45 +4,11 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        //load images/tilesprite
-        this.load.image('starfield', "./assets/starfield.png");
-
         this.load.spritesheet('explosion', './assets/explosion.png', {
             frameWidth: 64,
             frameHeight: 32,
             startFrame: 0,
             endFrame: 9,
-        });
-
-        this.load.spritesheet('pod1', './assets/pod1.png', {
-            frameWidth: 32,
-            frameHeight: 16,
-            startFrame: 0,
-            endFrame: 1,
-        });
-
-        //only load if multiplayer
-        if (!game.singleplayer) {
-            this.load.spritesheet('pod2', './assets/pod2.png', {
-                frameWidth: 32,
-                frameHeight: 16,
-                startFrame: 0,
-                endFrame: 1,
-            });
-        }
-
-        this.load.spritesheet('target_big1', './assets/target_big1.png', {
-            frameWidth: 63,
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 1,
-        });
-
-        this.load.spritesheet('target_small', './assets/target_small.png', {
-            frameWidth: 41,
-            frameHeight: 22,
-            startFrame: 0,
-            endFrame: 1,
         });
     }
 
@@ -53,11 +19,13 @@ class Play extends Phaser.Scene {
         //white rectangle borders
         this.add.rectangle(5, 5, 630, 32, 0xFFFFFF).setOrigin(0,0);
         this.add.rectangle(5, 443, 630, 32, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(5, 5, 32, 455, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(603, 5, 32, 455, 0xFFFFFF).setOrigin(0,0);
+        this.add.rectangle(5, 5, 32, 101, 0xFFFFFF).setOrigin(0,0);
+        this.add.rectangle(603, 5, 32, 101, 0xFFFFFF).setOrigin(0,0);
+        this.add.rectangle(5, 400, 32, 60, 0xFFFFFF).setOrigin(0,0);
+        this.add.rectangle(603, 400, 32, 60, 0xFFFFFF).setOrigin(0,0);
 
         //green UI background
-        this.add.rectangle(37, 42, 566, 64, 0x89EC5B).setOrigin(0,0);
+        this.add.rectangle(37, 42, 566, 64, 0x53CC32).setOrigin(0,0);
 
         //add pods
         if (!game.singleplayer) {
@@ -67,10 +35,11 @@ class Play extends Phaser.Scene {
             this.p1Rocket = new Rocket(this, game.config.width/2, 431, 'pod1', 0, 1).setScale(0.5, 0.5).setOrigin(0,0);
         }
 
-        //add targets (x3)
+        //add targets (x4)
         this.ship01 = new Target(this, game.config.width+192, 132, 'target_big1', 0, 30, true).setOrigin(0,0);
-        this.ship02 = new Target(this, game.config.width+96, 207, 'target_small', 0, 20, false).setOrigin(0,0);
-        this.ship03 = new Target(this, game.config.width, 260, 'target_big1', 0, 10, true).setOrigin(0,0);
+        this.ship02 = new Target(this, game.config.width+400, 181, 'target_small', 0, 35, false).setOrigin(0,0);
+        this.ship03 = new Target(this, game.config.width, 292, 'target_big1', 0, 10, true).setOrigin(0,0);
+        this.ship04 = new Target(this, game.config.width+96, 212, 'target_big1', 0, 20, true).setOrigin(0, 0);
 
         //define keyboard keys
         //player1 controls
@@ -161,6 +130,7 @@ class Play extends Phaser.Scene {
         this.ship01.anims.play('laika');
         this.ship02.anims.play('blink');
         this.ship03.anims.play('laika');
+        this.ship04.anims.play('laika');
 
         //------------------
         //score configuration
@@ -224,6 +194,7 @@ class Play extends Phaser.Scene {
             this.ship01.update();
             this.ship02.update();
             this.ship03.update();
+            this.ship04.update();
         }
 
         //---------------------------------------------------
@@ -255,6 +226,11 @@ class Play extends Phaser.Scene {
             this.spaceshipKaboom(this.ship03, 1);
         }
 
+        if (this.colliding(this.p1Rocket, this.ship04) && !this.ship04.isHit) {
+            this.p1Rocket.reset();
+            this.spaceshipKaboom(this.ship04, 1);
+        }
+
         if (!game.singleplayer) {
             if (this.colliding(this.p2Rocket, this.ship01) && !this.ship01.isHit) {
                 this.p2Rocket.reset();
@@ -269,6 +245,11 @@ class Play extends Phaser.Scene {
             if (this.colliding(this.p2Rocket, this.ship03) && !this.ship03.isHit) {
                 this.p2Rocket.reset();
                 this.spaceshipKaboom(this.ship03, 2);
+            }
+
+            if (this.colliding(this.p2Rocket, this.ship04) && !this.ship04.isHit) {
+                this.p2Rocket.reset();
+                this.spaceshipKaboom(this.ship04, 2);
             }
         }
     }

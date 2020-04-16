@@ -26,8 +26,12 @@ class Target extends Phaser.GameObjects.Sprite {
         }
 
         //wraparound screen bounds
-        if (this.x <= 0 - this.width) {
-            this.x = game.config.width;
+        if (this.x <= -20 - this.width) {
+            if (this.big) {
+                this.x = game.config.width;
+            } else {
+                this.x = game.config.width + 240;
+            }
         }
     }
 
