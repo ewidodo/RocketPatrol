@@ -17,15 +17,15 @@ class Play extends Phaser.Scene {
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
         //white rectangle borders
-        this.add.rectangle(5, 5, 630, 32, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(5, 443, 630, 32, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(5, 5, 32, 101, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(603, 5, 32, 101, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(5, 400, 32, 60, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(603, 400, 32, 60, 0xFFFFFF).setOrigin(0,0);
+        this.add.rectangle(5, 5, 630, 32, 0x717171).setOrigin(0,0);
+        this.add.rectangle(5, 443, 630, 32, 0x717171).setOrigin(0,0);
+        this.add.rectangle(5, 5, 32, 101, 0x717171).setOrigin(0,0);
+        this.add.rectangle(603, 5, 32, 101, 0x717171).setOrigin(0,0);
+        this.add.rectangle(5, 400, 32, 60, 0x717171).setOrigin(0,0);
+        this.add.rectangle(603, 400, 32, 60, 0x717171).setOrigin(0,0);
 
         //green UI background
-        this.add.rectangle(37, 42, 566, 64, 0x53CC32).setOrigin(0,0);
+        this.add.rectangle(37, 37, 566, 69, 0xC7C7C7).setOrigin(0,0);
 
         //add pods
         if (!game.singleplayer) {
@@ -36,10 +36,10 @@ class Play extends Phaser.Scene {
         }
 
         //add targets (x4)
-        this.ship01 = new Target(this, game.config.width, 292, 'target_big1', 0, 10, true).setOrigin(0,0);
-        this.ship02 = new Target(this, game.config.width+96, 212, 'target_big2', 0, 20, true).setOrigin(0, 0);
+        this.ship01 = new Target(this, game.config.width, 260, 'target_big1', 0, 10, true).setOrigin(0,0);
+        this.ship02 = new Target(this, game.config.width+96, 196, 'target_big2', 0, 20, true).setOrigin(0, 0);
         this.ship03 = new Target(this, game.config.width+192, 132, 'target_big3', 0, 30, true).setOrigin(0,0);
-        this.ship04 = new Target(this, game.config.width+400, 181, 'target_small', 0, 35, false).setOrigin(0,0);
+        this.ship04 = new Target(this, game.config.width+400, 169, 'target_small', 0, 35, false).setOrigin(0,0);
 
         //define keyboard keys
         //player1 controls
@@ -67,7 +67,7 @@ class Play extends Phaser.Scene {
                 end: 9,
                 first: 0,
             }),
-            frameRate: 30,
+            frameRate: 24,
         });
 
         //-------------------------
@@ -82,8 +82,8 @@ class Play extends Phaser.Scene {
         this.ship03.anims.play('hachi');
         this.ship04.anims.play('blink');
 
-        //------------------
-        //score configuration
+        //---------------------------
+        //score & clock configuration
         this.p1Score = 0;
         if (!game.singeplayer) {
             this.p2Score = 0;
@@ -100,12 +100,17 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100,
         }
-        this.leftScore = this.add.text(69, 54, this.p1Score, scoreConfig);
+        this.leftScore = this.add.text(69, 51, this.p1Score, scoreConfig);
         if (!game.singleplayer) {
             scoreConfig.backgroundColor = '#78B9F4';
             scoreConfig.color = '#13416B';
-            this.rightScore = this.add.text(471, 54, this.p2Score, scoreConfig);
+            this.rightScore = this.add.text(471, 51, this.p2Score, scoreConfig);
         }
+
+        scoreConfig.backgroundColor = null;
+        scoreConfig.color = '#717171';
+        scoreConfig.align = 'center';
+        this.timer = this.add.text(game.config.width/2, 64, '', scoreConfig).setOrigin(0.5);
 
         //--------------
         //game over flag
@@ -113,9 +118,33 @@ class Play extends Phaser.Scene {
 
         //timer configuration
         scoreConfig.fixedWidth = 0;
-        this.timer = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press [J] to Restart\n[Space] for Menu', scoreConfig).setOrigin(0.5);
+        this.countdown = this.time.delayedCall(game.settings.gameTimer, () => {
+            scoreConfig.backgroundColor = '#717171';
+            scoreConfig.color = '#B7B7B7';
+            scoreConfig.align = 'center';
+
+            this.add.text(game.config.width/2, game.config.height/2 - 50, 'GAME OVER', scoreConfig).setOrigin(0.5);
+
+            if (!game.singleplayer) {
+                if (this.p1Score > this.p2Score) {
+                    scoreConfig.color = '#F3B141';
+                    this.add.text(game.config.width/2, game.config.height/2, 'PLAYER 1 WINS!', scoreConfig).setOrigin(0.5);
+                    scoreConfig.color = '#B7B7B7';
+                }
+
+                if (this.p1Score == this.p2Score) {
+                    this.add.text(game.config.width/2, game.config.height/2, 'IT\'S A DRAW!', scoreConfig).setOrigin(0.5);
+                }
+
+                if (this.p1Score < this.p2Score) {
+                    scoreConfig.color = '#78B9F4';
+                    this.add.text(game.config.width/2, game.config.height/2, 'PLAYER 2 WINS!', scoreConfig).setOrigin(0.5);
+                    scoreConfig.color = '#B7B7B7';
+                }
+            }
+
+            this.add.text(game.config.width/2, game.config.height/2 + 64, '[J] RESTART\n[SPACE] MENU ', scoreConfig).setOrigin(0.5);
+
             this.gameOver = true;
         }, null, this);
 
@@ -145,6 +174,9 @@ class Play extends Phaser.Scene {
             this.ship02.update();
             this.ship03.update();
             this.ship04.update();
+
+            //update clock
+            this.timer.setText((game.settings.gameTimer/1000)-Math.floor(this.countdown.getElapsedSeconds()));
         }
 
         //---------------------------------------------------

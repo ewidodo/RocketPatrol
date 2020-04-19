@@ -24,7 +24,8 @@ class Menu extends Phaser.Scene {
 
         //-----------
         //load sounds
-        this.load.audio('sfx_select', './assets/blip_select12.wav');
+        this.load.audio('sfx_select1', './assets/blip_select1.wav');
+        this.load.audio('sfx_select2', './assets/blip_select2.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
 
@@ -153,7 +154,7 @@ class Menu extends Phaser.Scene {
         //start building menu screen
 
         //divider
-        this.add.rectangle(112, 308, 416, 2, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(112, 308, 416, 2, 0xEEEEEE).setOrigin(0, 0);
 
         //instructional images
         this.p1 = this.add.sprite(112, 320, 'pod1').setOrigin(0, 0);
@@ -166,18 +167,18 @@ class Menu extends Phaser.Scene {
         this.tile_up = this.add.image(156, 424, 'up').setOrigin(0, 0);
 
         //menu buttons
-        this.tile_y = this.add.image(112, 192, 'y').setOrigin(0, 0);
-        this.tile_u = this.add.image(112, 232, 'u').setOrigin(0, 0);
-        this.tile_y_sel = this.add.image(112, 192, 'y_sel').setOrigin(0, 0);
-        this.tile_u_sel = this.add.image(112, 232, 'u_sel').setOrigin(0, 0);
-        this.tile_h = this.add.image(308, 192, 'h').setOrigin(0, 0);
-        this.tile_j = this.add.image(308, 232, 'j').setOrigin(0, 0);
+        this.tile_y = this.add.image(112, 198, 'y').setOrigin(0, 0);
+        this.tile_u = this.add.image(112, 238, 'u').setOrigin(0, 0);
+        this.tile_y_sel = this.add.image(112, 198, 'y_sel').setOrigin(0, 0);
+        this.tile_u_sel = this.add.image(112, 238, 'u_sel').setOrigin(0, 0);
+        this.tile_h = this.add.image(308, 198, 'h').setOrigin(0, 0);
+        this.tile_j = this.add.image(308, 238, 'j').setOrigin(0, 0);
 
         //targets list
-        this.hachi = this.add.sprite(324, 344, 'target_big3').setOrigin(0, 0);
-        this.laika = this.add.sprite(324, 384, 'target_big2').setOrigin(0, 0);
-        this.mason = this.add.sprite(324, 424, 'target_big1').setOrigin(0, 0);
-        this.blink = this.add.sprite(456, 349, 'target_small').setOrigin(0, 0);
+        this.hachi = this.add.sprite(312, 332, 'target_big3').setOrigin(0, 0);
+        this.laika = this.add.sprite(312, 372, 'target_big2').setOrigin(0, 0);
+        this.mason = this.add.sprite(312, 412, 'target_big1').setOrigin(0, 0);
+        this.blink = this.add.sprite(441, 337, 'target_small').setOrigin(0, 0);
 
         //play animations
         this.p1.anims.play('player1');
@@ -191,7 +192,7 @@ class Menu extends Phaser.Scene {
             fontFamily: 'Courier',
             fontSize: '16px',
             backgroundColor: null,
-            color: '#F2EA0D',
+            color: '#CFA93E',
             align: 'left',
         }
 
@@ -200,19 +201,20 @@ class Menu extends Phaser.Scene {
         this.add.text(this.tile_right.x + this.tile_right.width + 12, this.tile_right.y + 8, 'Move right', instructionConfig).setOrigin(0, 0);
         this.add.text(this.tile_up.x + this.tile_up.width + 12, this.tile_up.y + 8, 'Fire pod', instructionConfig).setOrigin(0, 0);
 
-        instructionConfig.fontSize = '14px'
+        instructionConfig.fontSize = '12px'
 
-        this.add.text(this.mason.x + this.mason.width + 8, this.mason.y + 8, '+10', instructionConfig).setOrigin(0, 0);
-        this.add.text(this.laika.x + this.laika.width + 8, this.laika.y + 8, '+20', instructionConfig).setOrigin(0, 0);
-        this.add.text(this.hachi.x + this.hachi.width + 8, this.hachi.y + 8, '+30', instructionConfig).setOrigin(0, 0);
-        this.add.text(this.blink.x + this.blink.width + 8, this.blink.y + 5, '+50', instructionConfig).setOrigin(0, 0);
+        this.add.text(this.mason.x + this.mason.width + 7, this.mason.y + 11, '= 10pt', instructionConfig).setOrigin(0, 0);
+        this.add.text(this.laika.x + this.laika.width + 7, this.laika.y + 11, '= 20pt', instructionConfig).setOrigin(0, 0);
+        this.add.text(this.hachi.x + this.hachi.width + 7, this.hachi.y + 11, '= 30pt', instructionConfig).setOrigin(0, 0);
+        this.add.text(this.blink.x + this.blink.width + 5, this.blink.y + 6, '= 50pt', instructionConfig).setOrigin(0, 0);
 
-        instructionConfig.color = '#FFFFFF';
+        instructionConfig.fontSize = '14px';
+        instructionConfig.color = '#EEEEEE';
 
         this.add.text(112, 290, 'Guide', instructionConfig).setOrigin (0, 0);
 
         //menu text
-        instructionConfig.color = '#53CC32';
+        instructionConfig.color = '#6ED93D';
         instructionConfig.fontSize = '18px';
 
         this.add.text(this.tile_y.x + this.tile_y.width + 12, this.tile_y.y + 8, '1 Player', instructionConfig).setOrigin(0, 0);
@@ -242,7 +244,7 @@ class Menu extends Phaser.Scene {
     
         if (Phaser.Input.Keyboard.JustDown(keyY)) {
             //singleplayer
-            this.sound.play('sfx_select');
+            this.sound.play('sfx_select1');
             game.singleplayer = true;
             this.tile_y_sel.alpha = 1;
             this.tile_u_sel.alpha = 0;
@@ -250,7 +252,7 @@ class Menu extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(keyU)) {
             //multiplayer
-            this.sound.play('sfx_select');
+            this.sound.play('sfx_select1');
             game.singleplayer = false;
             this.tile_y_sel.alpha = 0;
             this.tile_u_sel.alpha = 1;
@@ -263,7 +265,7 @@ class Menu extends Phaser.Scene {
                 smallTargetSpeed: 4,
                 gameTimer: 60000,
             }
-            this.sound.play('sfx_select');
+            this.sound.play('sfx_select2');
             this.scene.start("playScene");
         }
 
@@ -274,7 +276,7 @@ class Menu extends Phaser.Scene {
                 smallTargetSpeed: 5,
                 gameTimer: 45000,
             }
-            this.sound.play('sfx_select');
+            this.sound.play('sfx_select2');
             this.scene.start("playScene");
         }
     }
