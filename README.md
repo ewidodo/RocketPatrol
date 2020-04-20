@@ -1,10 +1,8 @@
 Rocket Pawtrol - a Rocket Patrol mod by Enrico Widodo
 
-all art (except starfield) by Enrico Widodo
-music + sfx by Enrico Widodo
+Art (except starfield), Music and SFX by Enrico Widodo
 
 The animals have broken into the intergalactic rocket factory and are escaping! Use capture pods to safely capture the animals and prevent them from flying out into uncertain doom.
-
 
 ----------------
 Points breakdown
