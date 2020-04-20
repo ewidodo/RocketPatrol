@@ -16,13 +16,15 @@ class Play extends Phaser.Scene {
         //place tile sprites
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
-        //white rectangle borders
+        //rectangle borders
         this.add.rectangle(5, 5, 630, 32, 0x717171).setOrigin(0,0);
         this.add.rectangle(5, 443, 630, 32, 0x717171).setOrigin(0,0);
         this.add.rectangle(5, 5, 32, 101, 0x717171).setOrigin(0,0);
         this.add.rectangle(603, 5, 32, 101, 0x717171).setOrigin(0,0);
         this.add.rectangle(5, 400, 32, 60, 0x717171).setOrigin(0,0);
         this.add.rectangle(603, 400, 32, 60, 0x717171).setOrigin(0,0);
+        this.add.rectangle(5, 106, 32, 296, 0x3C3C3C).setOrigin(0,0);
+        this.add.rectangle(603, 106, 32, 296, 0x3C3C3C).setOrigin(0,0);
 
         //green UI background
         this.add.rectangle(37, 37, 566, 69, 0xC7C7C7).setOrigin(0,0);
