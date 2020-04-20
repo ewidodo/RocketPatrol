@@ -16,6 +16,7 @@ class Play extends Phaser.Scene {
         //place tile sprites
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
+        //-----------------
         //rectangle borders
         this.add.rectangle(5, 5, 630, 32, 0x717171).setOrigin(0,0);
         this.add.rectangle(5, 443, 630, 32, 0x717171).setOrigin(0,0);
@@ -26,9 +27,11 @@ class Play extends Phaser.Scene {
         this.add.rectangle(5, 106, 32, 296, 0x3C3C3C).setOrigin(0,0);
         this.add.rectangle(603, 106, 32, 296, 0x3C3C3C).setOrigin(0,0);
 
-        //green UI background
+        //-------------
+        //UI background
         this.add.rectangle(37, 37, 566, 69, 0xC7C7C7).setOrigin(0,0);
 
+        //--------
         //add pods
         if (!game.singleplayer) {
             this.p1Rocket = new Rocket(this, game.config.width/3, 431, 'pod1', 0, 1).setScale(0.5, 0.5).setOrigin(0,0);
@@ -38,17 +41,21 @@ class Play extends Phaser.Scene {
         }
 
         //add targets (x4)
-        this.ship01 = new Target(this, game.config.width, 260, 'target_big1', 0, 10, true).setOrigin(0,0);
-        this.ship02 = new Target(this, game.config.width+96, 196, 'target_big2', 0, 20, true).setOrigin(0, 0);
-        this.ship03 = new Target(this, game.config.width+192, 132, 'target_big3', 0, 30, true).setOrigin(0,0);
-        this.ship04 = new Target(this, game.config.width+400, 169, 'target_small', 0, 35, false).setOrigin(0,0);
+        this.ship01 = new Target(this, game.config.width, 260, 'target_big1', 0, 10, true).setOrigin(0,0); //mason - bottom ship
+        this.ship02 = new Target(this, game.config.width+96, 196, 'target_big2', 0, 20, true).setOrigin(0, 0); //laika - middle ship
+        this.ship03 = new Target(this, game.config.width+192, 132, 'target_big3', 0, 30, true).setOrigin(0,0); //hachi - top ship
+        this.ship04 = new Target(this, game.config.width+400, 169, 'target_small', 0, 35, false).setOrigin(0,0); //blink - small and fast
 
+        //--------------------
         //define keyboard keys
+
+        //----------------
         //player1 controls
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); //player 1 move left
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); //player 1 move right
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W); //player 1 shoot
 
+        //-----------------
         //player 2 controls
         if (!game.singleplayer) {
             keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT); //player 2 move left
@@ -56,6 +63,7 @@ class Play extends Phaser.Scene {
             keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP); //player 2 shoot
         }
 
+        //--------------
         //misc. controls
         keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J); //replay game
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); //return to menu
@@ -114,10 +122,47 @@ class Play extends Phaser.Scene {
         scoreConfig.align = 'center';
         this.timer = this.add.text(game.config.width/2, 64, '', scoreConfig).setOrigin(0.5);
 
+        //-----------
+        //sector text
+        this.rnd = Phaser.Math.RND;
+
+        let sectorConfig = {
+            fontFamily : 'Courier',
+            fontSize: '16px',
+            backgroundColor: null,
+            color: '#B7B7B7',
+            align: 'left',
+            padding: {
+                top: 5,
+                bottom: 5,
+            }
+        };
+
+        this.sector = 'SECTOR 0';
+        this.sectorNum = Phaser.Math.Between(1, 9);
+        this.sectorLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        this.sectorLetter = this.rnd.pick(this.sectorLetters);
+        this.sectorWarnings = ['DO NOT LOAD WITH GOBLIN ARMOUR', 'ALLAN PLEASE ADD DETAILS',
+                               'BANANA YUCCA FREE ZONE', 'OVERHEAD CAPACITORS TO 105%',
+                               'HIGH RAINFALL EXPECTED', 'AVOID ON WEDNESDAYS MAYBE FRIDAY',
+                               'MOOSE KARVING ZONE', 'FALADOR NEXT LEFT',
+                               'NOW WITH 100% LESS BACKGROUND NOISE', 'NEXT EXIT NEW PUDSEY',
+                               'NOW MADE WITH 100% REAL MATERIALS', 'FEATURING THE MACHINE THAT GOES PING',
+                               'LOOK MOM NO RADIO CONTACT', 'MASTER CAKE STORAGE DIVISION',
+                               'we ran out of capital letters', 'MASTER CANE POPPING DIVISION',
+                               'NO BACKWARDS ACCELERATION HERE', 'NEXT GAS 10 MILES',
+                               '$5 TACOS ON TACO TUESDAE', 'NO 2-TICKING ALLOWED'];
+        this.sectorWarning = this.rnd.pick(this.sectorWarnings);
+        this.sector += this.sectorNum;
+        this.sector += this.sectorLetter;
+        this.sector += ' || ' + this.sectorWarning;
+        this.sectorText = this.add.text(48, 446, this.sector, sectorConfig).setOrigin(0, 0);
+
         //--------------
         //game over flag
         this.gameOver = false;
 
+        //-------------------
         //timer configuration
         scoreConfig.fixedWidth = 0;
         this.countdown = this.time.delayedCall(game.settings.gameTimer, () => {
@@ -178,6 +223,7 @@ class Play extends Phaser.Scene {
             this.ship04.update();
 
             //update clock
+            //this code was gotten from discussions w/ Jameson D. and Jacob C. from this class
             this.timer.setText((game.settings.gameTimer/1000)-Math.floor(this.countdown.getElapsedSeconds()));
         }
 

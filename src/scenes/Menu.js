@@ -153,9 +153,11 @@ class Menu extends Phaser.Scene {
         //--------------------------
         //start building menu screen
 
+        //-------
         //divider
         this.add.rectangle(112, 308, 416, 2, 0xEEEEEE).setOrigin(0, 0);
 
+        //--------------------
         //instructional images
         this.p1 = this.add.sprite(112, 320, 'pod1').setOrigin(0, 0);
         this.tile_a = this.add.image(112, 344, 'a').setOrigin(0, 0);
@@ -166,6 +168,7 @@ class Menu extends Phaser.Scene {
         this.tile_right = this.add.image(156, 384, 'right').setOrigin(0, 0);
         this.tile_up = this.add.image(156, 424, 'up').setOrigin(0, 0);
 
+        //------------
         //menu buttons
         this.tile_y = this.add.image(112, 198, 'y').setOrigin(0, 0);
         this.tile_u = this.add.image(112, 238, 'u').setOrigin(0, 0);
@@ -174,12 +177,14 @@ class Menu extends Phaser.Scene {
         this.tile_h = this.add.image(308, 198, 'h').setOrigin(0, 0);
         this.tile_j = this.add.image(308, 238, 'j').setOrigin(0, 0);
 
+        //------------
         //targets list
         this.hachi = this.add.sprite(312, 332, 'target_big3').setOrigin(0, 0);
         this.laika = this.add.sprite(312, 372, 'target_big2').setOrigin(0, 0);
         this.mason = this.add.sprite(312, 412, 'target_big1').setOrigin(0, 0);
         this.blink = this.add.sprite(441, 337, 'target_small').setOrigin(0, 0);
 
+        //---------------
         //play animations
         this.p1.anims.play('player1');
         this.p2.anims.play('player2');
@@ -196,6 +201,7 @@ class Menu extends Phaser.Scene {
             align: 'left',
         }
 
+        //-----------------
         //instructions text
         this.add.text(this.tile_left.x + this.tile_left.width + 12, this.tile_left.y + 8, 'Move left', instructionConfig).setOrigin(0, 0);
         this.add.text(this.tile_right.x + this.tile_right.width + 12, this.tile_right.y + 8, 'Move right', instructionConfig).setOrigin(0, 0);
@@ -213,6 +219,7 @@ class Menu extends Phaser.Scene {
 
         this.add.text(112, 290, 'Guide', instructionConfig).setOrigin (0, 0);
 
+        //---------
         //menu text
         instructionConfig.color = '#6ED93D';
         instructionConfig.fontSize = '18px';
